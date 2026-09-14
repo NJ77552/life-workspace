@@ -1,4 +1,5 @@
 <!DOCTYPE html>
+<!-- 本工作台通过 WorkBuddy 资料库能力（library skill）思路搭建，数据默认存浏览器 localStorage，可部署为在线 page 当 APP 使用 -->
 <html lang="zh-CN" data-page-node-id="WF7oU1KidL8AzMNNEJKLBZ">
 <head data-page-node-id="1RVt98rwKolfy0iMYVg8ge">
 <meta charset="UTF-8" data-page-node-id="yfUb74sdTMQSFCeZAa8z23" />
@@ -1078,6 +1079,10 @@ function viewMoney(){
   const mScope=S.txns.filter(t=>isBooked(t)&&monthKey(t.date)===curMonthKey);
   const mExp=mScope.filter(x=>x.type==="exp").reduce((s,x)=>s+x.amount,0);
   const mInc=mScope.filter(x=>x.type==="inc").reduce((s,x)=>s+x.amount,0);
+  const curExp=S.txns.filter(x=>x.type==="exp"
+    &&(moneyFilter.booked==="all"||(moneyFilter.booked==="booked"?isBooked(x):!isBooked(x)))
+    &&(moneyFilter.year==="all"||String(x.date).startsWith(String(moneyFilter.year)))
+  ).reduce((s,x)=>s+x.amount,0);
   const filtered=filterTxns();
 
   setContent(
@@ -1085,6 +1090,7 @@ function viewMoney(){
     '<div class="grid g2" style="margin-bottom:16px">'+
       moneyStat(mExp,"red","spend","i-exp")+
       moneyStat(mInc,"green","income","i-inc")+
+      '<div class="card stat stat-row" style="grid-column:1/-1"><div class="k"><span style="font-size:12.5px;color:var(--text-2)">当前支出</span><span style="font-size:11px;color:var(--text-2);opacity:.7;margin-left:6px">'+(moneyFilter.year==="all"?"全部年份":moneyFilter.year+"年")+(moneyFilter.booked==="booked"?" · 已入账":moneyFilter.booked==="unbooked"?" · 未入账":"")+'</span></div><div class="v red">'+money(curExp).replace("¥","")+'</div></div>'+
     '</div>'+
     '<div class="sec-head"><h3 class="view-title" style="margin:0">收支记录</h3><div style="display:flex;gap:10px"><button class="btn-ghost btn-round" id="viewCharts" title="图表分析">'+svg("budget")+'</button><button class="btn-ghost btn-round" id="expCsv" title="导出 Excel">'+svg("download")+'</button><button class="btn-add btn-round" id="addTxn" title="记一笔">'+svg("plus")+'</button></div></div>'+
     '<div class="filters">'+
