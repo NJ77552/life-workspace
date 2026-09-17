@@ -1945,7 +1945,7 @@ document.addEventListener("click",e=>{
   const done=e.target.closest("[data-done]");
   if(done){ const ev=S.events.find(x=>x.id===done.dataset.done); if(ev){ev.done=!ev.done; save(); viewCal();} return; }
   const buy=e.target.closest("[data-buy]");
-  if(buy){ const s=S.shop.find(x=>x.id===buy.dataset.id); if(s){s.done=!s.done; save(); viewShop();} return; }
+  if(buy){ const s=S.shop.find(x=>x.id===buy.dataset.buy); if(s){s.done=!s.done; save(); viewShop();} return; }
 });
 
 // 点遮罩关闭弹窗 + ESC 关闭
